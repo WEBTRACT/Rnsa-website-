@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RNSA Admin Dashboard</title>
+  <meta name="description" content="Private admin area for the Racing Nation SA website.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html"><img src="images/rnsa-logo.webp" alt="Racing Nation SA logo" width="44" height="44"><span>RNSA ADMIN</span></a>
+  <button class="btn btn-outline small" id="logoutBtn" type="button" hidden>Log out</button>
+</header>
+
+<main class="admin-wrap container narrow">
+
+  <!-- LOGIN -->
+  <section class="panel" id="loginPanel">
+    <p class="eyebrow">Admin access</p>
+    <h2>LOG <span class="red">IN</span></h2>
+    <div id="setupMsg" class="msg err" hidden>Supabase is not connected yet. Open config.js and add your Project URL and anon key.</div>
+    <div class="form">
+      <label>Email<input type="email" id="email" autocomplete="username" required></label>
+      <label>Password<input type="password" id="password" autocomplete="current-password" required></label>
+      <button class="btn btn-red" id="loginBtn" type="button">Log in</button>
+    </div>
+    <div id="loginMsg"></div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <div id="dash" hidden>
+    <p class="eyebrow">Developer dashboard</p>
+    <h1 style="font-size:2.6rem;margin-bottom:.5rem">MANAGE <span class="red">RNSA</span></h1>
+    <p class="muted">Manage the Racing Nation South Africa website.</p>
+    <div class="stats"><div><strong id="stEvents">0</strong><span>Events</span></div><div><strong id="stPhotos">0</strong><span>Photos</span></div><div><strong id="stProducts">0</strong><span>Products</span></div></div>
+    <div class="quick"><a class="btn btn-outline small" href="#sec-events">Events</a><a class="btn btn-outline small" href="#sec-gallery">Gallery</a><a class="btn btn-outline small" href="#sec-products">Products</a><a class="btn btn-outline small" href="index.html" target="_blank" rel="noopener">View website</a></div>
+    <div id="globalMsg"></div>
+
+    <!-- EVENTS -->
+    <section class="panel" id="sec-events">
+      <h2>EVENTS</h2>
+      <p class="muted">The site shows the next upcoming event and counts down to it.</p>
+      <div class="form">
+        <label>Event name<input id="evTitleIn" maxlength="80" required></label>
+        <label>Description<textarea id="evDescIn" rows="2" maxlength="300"></textarea></label>
+        <label>Date and time<input type="datetime-local" id="evDateIn" required></label>
+        <label>Location<input id="evLocIn" maxlength="80" placeholder="Durban, South Africa"></label>
+        <button class="btn btn-red" id="addEventBtn" type="button">+ Add event</button>
+      </div>
+      <div id="eventList"></div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="panel" id="sec-gallery">
+      <h2>GALLERY</h2>
+      <p class="muted">Add or remove RNSA pictures. Photos are shrunk automatically so the site stays fast.</p>
+      <div class="form">
+        <label>Pick photos (you can choose many)<input type="file" id="galFiles" accept="image/*" multiple></label>
+        <label>Caption (optional)<input id="galCaption" maxlength="100"></label>
+        <button class="btn btn-red" id="addPhotoBtn" type="button">+ Add pictures</button>
+      </div>
+      <div class="admin-thumbs" id="galList"></div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="panel" id="sec-products">
+      <h2>PRODUCTS</h2>
+      <p class="muted">Add and manage RNSA merchandise. After adding a product, add its colours, sizes and stock.</p>
+      <div class="form">
+        <label>Product name<input id="pName" maxlength="80" required></label>
+        <label>Description<textarea id="pDesc" rows="2" maxlength="300"></textarea></label>
+        <label>Price (R)<input type="number" id="pPrice" min="0" step="0.01" inputmode="decimal" required></label>
+        <label>Product image<input type="file" id="pImage" accept="image/*"></label>
+        <button class="btn btn-red" id="addProductBtn" type="button">+ Add product</button>
+      </div>
+      <div id="productList"></div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

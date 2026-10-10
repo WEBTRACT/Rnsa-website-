@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Racing Nation SA | RNSA - Car Club, Events &amp; Merch</title>
+  <meta name="description" content="Racing Nation SA (RNSA) is a South African car club built around performance cars, events and community. See the next event, shop merch and join the nation.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Share previews (WhatsApp, Facebook etc). Replace rnsa.pages.dev with the real web address. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Racing Nation SA | RNSA">
+  <meta property="og:description" content="Built for speed. Car meets, events, merch and community in South Africa.">
+  <meta property="og:image" content="https://rnsa.pages.dev/images/og-image.jpg">
+  <meta property="og:url" content="https://rnsa.pages.dev/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    /* Intro plays once per visit. Skipped for people who prefer less motion. */
+    (function(){var d=document.documentElement;d.classList.add("js");
+    try{if(!sessionStorage.getItem("rnsa-intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("intro-on");}catch(e){}})();
+  </script>
+</head>
+<body>
+
+<!-- INTRO ANIMATION -->
+<div id="intro" role="presentation">
+  <div class="in-panel top"></div>
+  <div class="in-panel bot"></div>
+  <div class="in-streak"></div>
+  <div class="in-center">
+    <img class="in-logo" src="images/rnsa-logo.webp" alt="" width="220" height="220">
+    <p class="in-word">Racing Nation SA</p>
+    <div class="in-bar"><i></i></div>
+  </div>
+  <p class="in-count"><span id="inCount">000</span><small>%</small></p>
+  <p class="in-est">EST. 2021</p>
+  <p class="in-skip">Tap to skip</p>
+</div>
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="top">
+  <a class="brand" href="#home" aria-label="RNSA home">
+    <img src="images/rnsa-logo.webp" alt="Racing Nation SA logo" width="44" height="44">
+    <span>RNSA</span>
+  </a>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+  <nav id="menu" aria-label="Main menu">
+    <a href="#home">Home</a>
+    <a href="#events">Events</a>
+    <a href="#merch">Merch</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#cart" class="cart-link"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg> Cart <span id="cartCount">0</span></a>
+  </nav>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow">Racing Nation South Africa</p>
+      <h1>BUILT FOR <span class="red">SPEED.</span></h1>
+      <p class="lead">Where passion meets performance.<br>Welcome to Racing Nation SA.</p>
+      <div class="btn-row">
+        <a class="btn btn-red" href="#events">View next event</a>
+        <a class="btn btn-outline" href="#contact">Join the race</a>
+      </div>
+    </div>
+    <div class="hero-art"><img src="images/rnsa-logo-splash.webp" alt="Racing Nation SA logo with red and grey paint splash" width="600" height="600"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Built for speed</span><span>Community</span><span>Performance</span><span>Experience</span><span>Racing Nation SA</span><span>Durban</span>
+    <span>Built for speed</span><span>Community</span><span>Performance</span><span>Experience</span><span>Racing Nation SA</span><span>Durban</span>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<section class="section" id="events">
+  <div class="container">
+    <p class="eyebrow">RNSA Events</p>
+    <h2>NEXT <span class="red">EVENT</span></h2>
+
+    <div class="event-card" id="eventCard">
+      <p class="tag">Next RNSA event</p>
+      <h3 id="evTitle">Loading...</h3>
+      <p id="evDesc" class="muted"></p>
+
+      <ul class="event-info">
+        <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><div><small>Date</small><strong id="evDate">--</strong></div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><small>Location</small><strong id="evLocation">--</strong></div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Time</small><strong id="evTime">--</strong></div></li>
+      </ul>
+
+      <div id="countdownWrap">
+        <p class="tag">Event starts in</p>
+        <div class="countdown" role="timer" aria-live="off">
+          <div><strong id="cdDays">--</strong><span>Days</span></div>
+          <div><strong id="cdHours">--</strong><span>Hours</span></div>
+          <div><strong id="cdMins">--</strong><span>Minutes</span></div>
+          <div><strong id="cdSecs">--</strong><span>Seconds</span></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn btn-red" href="#contact">Enter your car</a>
+        <a class="btn btn-outline" href="#contact">Event details</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCH -->
+<section class="section alt" id="merch">
+  <div class="container">
+    <p class="eyebrow">Wear the nation</p>
+    <h2>RNSA <span class="red">MERCH</span></h2>
+    <p class="lead small">Represent Racing Nation SA wherever you go.<br>Official RNSA clothing and accessories.</p>
+    <div class="grid products" id="productGrid"><p class="muted">Loading merch...</p></div>
+  </div>
+</section>
+
+<!-- CART -->
+<section class="section" id="cart">
+  <div class="container narrow">
+    <p class="eyebrow">Your RNSA order</p>
+    <h2>SHOPPING <span class="red">CART</span></h2>
+    <div class="cart-box">
+      <div id="cartEmpty" class="cart-empty">
+        <div class="empty-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></div>
+        <h3>Your cart is empty</h3>
+        <p class="muted">Add some official RNSA merchandise to your cart.</p>
+        <a class="btn btn-outline" href="#merch">View merch</a>
+      </div>
+      <ul id="cartList" class="cart-list" hidden></ul>
+      <div class="cart-total"><span>TOTAL</span><strong id="cartTotal">R0</strong></div>
+      <a class="btn btn-red wide" id="checkoutBtn" href="#cart" target="_blank" rel="noopener" aria-disabled="true">Checkout via WhatsApp</a>
+      <p class="muted tiny">Your order opens in WhatsApp. Payment and delivery are arranged there.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section alt" id="about">
+  <div class="container">
+    <p class="eyebrow">The RNSA movement</p>
+    <h2>MORE THAN A <span class="red">CAR CLUB.</span></h2>
+    <div class="two-col">
+      <div>
+        <p>Racing Nation SA is a community built around the passion, culture and lifestyle of performance cars.</p>
+        <p>From organised events and meets to the people behind the cars, RNSA brings enthusiasts together to experience the automotive culture in a different way.</p>
+        <a class="btn btn-red" href="https://chat.whatsapp.com/FKEGXZVYN5RFfNSR9Y8iOh?s=cl&amp;p=a&amp;mlu=4" target="_blank" rel="noopener">Join the nation</a>
+      </div>
+      <div class="pillars">
+        <div class="pillar"><b>01</b><h3>Community</h3><p>Bringing car enthusiasts together through shared passion.</p></div>
+        <div class="pillar"><b>02</b><h3>Performance</h3><p>Celebrating the machines, builds and people behind them.</p></div>
+        <div class="pillar"><b>03</b><h3>Experience</h3><p>Creating events and memories that keep the nation moving.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="container">
+    <p class="eyebrow">The nation in motion</p>
+    <h2>RNSA <span class="red">GALLERY</span></h2>
+    <p class="lead small">A look back at the cars, people and moments that make Racing Nation SA.</p>
+    <div class="grid gallery" id="galleryGrid"><p class="muted">Loading photos...</p></div>
+    <p class="muted center">More photos from upcoming RNSA events.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section alt" id="contact">
+  <div class="container narrow center">
+    <p class="eyebrow">Ready to hit the road?</p>
+    <h2>BRING YOUR <span class="red">CAR.</span></h2>
+    <p>Want to bring your car to an RNSA event? Get in touch with the team and find out how you can enter.</p>
+    <p>Whether you're bringing a performance build, a classic, a modified street car or something completely unique, we'd love to hear from you.</p>
+    <div class="btn-row center-row">
+      <a class="btn btn-red" href="https://wa.me/27754175510" target="_blank" rel="noopener">Enter via WhatsApp</a>
+      <a class="btn btn-outline" href="https://chat.whatsapp.com/FKEGXZVYN5RFfNSR9Y8iOh?s=cl&amp;p=a&amp;mlu=4" target="_blank" rel="noopener">Join RNSA community</a>
+    </div>
+    <ul class="contact-info">
+      <li><small>WhatsApp</small><strong>+27 75 417 5510</strong></li>
+      <li><small>Email</small><strong><a href="mailto:Racingnationsa@gmail.com">Racingnationsa@gmail.com</a></strong></li>
+      <li><small>Location</small><strong>South Africa</strong></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div>
+      <img src="images/rnsa-logo.webp" alt="Racing Nation SA logo" width="64" height="64" loading="lazy">
+      <p><strong>RACING NATION SOUTH AFRICA</strong></p>
+      <p class="muted tiny">© 2026 Racing Nation SA. All rights reserved.</p>
+    </div>
+    <nav aria-label="Legal">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </nav>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/27754175510" target="_blank" rel="noopener" aria-label="Chat with RNSA on WhatsApp">
+  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>
+</a>
+
+<!-- Photo viewer -->
+<div class="lightbox" id="lightbox" hidden>
+  <button id="lbClose" aria-label="Close photo">×</button>
+  <img id="lbImg" src="" alt="">
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
