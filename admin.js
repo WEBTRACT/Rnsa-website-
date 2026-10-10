@@ -28,7 +28,7 @@
     $("loginBtn").disabled = true;
     var r = await sb.auth.signInWithPassword({ email: email, password: pass });
     $("loginBtn").disabled = false; $("password").value = "";
-    if (r.error) { say($("loginMsg"), "Login failed. Check your email and password.", false); return; }
+    if (r.error) { say($("loginMsg"), "Login failed: " + r.error.message, false); return; }
     showDash(r.data.session);
   });
   $("logoutBtn").addEventListener("click", async function () { await sb.auth.signOut(); location.reload(); });
