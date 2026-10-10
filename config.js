@@ -2,7 +2,7 @@
    The Supabase "anon" key is SAFE to be public (the database rules protect your data).
    NEVER paste the "service_role" key here. */
 window.RNSA_CONFIG = {
-  SUPABASE_URL: "https://visguuhelaevnrcieszes.supabase.co",
+  SUPABASE_URL: "https://visguuhelaevnrciezes.supabase.co",
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpc2d1dWhlbGFldm5yY2llemVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MjY5ODYsImV4cCI6MjEwNzIwMjk4Nn0.99GAYILLufr_VJr-xrIBI_ej49U_232GFxhQNOv8C-8",
   ADMIN_EMAIL: "saadsalejee25@gmail.com",
   BUCKET: "rnsa-images",
