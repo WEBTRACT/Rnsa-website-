@@ -180,6 +180,18 @@ p { margin-bottom: 1rem; }
 .gallery .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem .9rem .8rem; background: linear-gradient(0deg, rgba(7,8,11,.9), transparent); font-size: .78rem; text-align: left; color: #fff; opacity: 0; transition: opacity .4s; }
 .gallery button:hover .cap, .gallery button:focus-visible .cap { opacity: 1; }
 
+/* SIZE / COLOUR BUTTONS */
+.opt-label { margin: .3rem 0 0; font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .4rem; }
+.chip, .chip-check span { min-width: 46px; padding: .6rem .8rem; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,.28); font: inherit; font-size: .85rem; font-weight: 600; letter-spacing: .04em; cursor: pointer; text-align: center; display: inline-block; transition: background .25s, color .25s, border-color .25s; }
+.chip:hover:not(:disabled) { border-color: #fff; }
+.chip[aria-pressed="true"], .chip-check input:checked + span { background: #fff; color: #07080b; border-color: #fff; }
+.chip:disabled { opacity: .35; text-decoration: line-through; cursor: not-allowed; }
+.chip[hidden] { display: none; }
+.chip-check input { position: absolute; opacity: 0; pointer-events: none; }
+.chip-check { position: relative; display: inline-block; }
+.sizebox { border-top: 1px solid var(--line); padding-top: .9rem; margin-top: .6rem; }
+
 /* CART */
 .cart-box { background: var(--card); border: 1px solid var(--line); padding: 1.6rem; margin-top: 1.5rem; }
 .cart-empty { text-align: center; padding: 1rem 0 1.5rem; }

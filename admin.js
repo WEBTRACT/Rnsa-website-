@@ -119,9 +119,12 @@
         '<div class="grow"><strong>' + esc(p.name) + "</strong><br><small class='muted'>R" + Number(p.price) + '</small></div>' +
         '<button class="btn btn-outline small" data-del-prod="' + esc(p.id) + '" data-path="' + esc(p.image_path || "") + '" type="button">Delete product</button></div>' +
         vs +
-        '<div class="form" data-prod="' + esc(p.id) + '" style="grid-template-columns:1fr 1fr 90px auto;align-items:end">' +
-        '<label>Colour<input class="vc" maxlength="30" placeholder="Black"></label><label>Size<input class="vs" maxlength="20" placeholder="M"></label><label>Stock<input class="vk" type="number" min="0" value="10" inputmode="numeric"></label>' +
-        '<button class="btn btn-red small" data-add-var type="button">+ Variant</button></div></div>';
+        '<div class="sizebox" data-prod="' + esc(p.id) + '" data-have="' + esc((p.variants || []).map(function (v) { return (v.colour + "|" + v.size).toLowerCase(); }).join(";")) + '">' +
+        '<p class="opt-label">Add sizes</p>' +
+        '<div class="form" style="grid-template-columns:1fr 110px;align-items:end"><label>Colour<input class="vc" maxlength="30" placeholder="Black"></label><label>Stock each<input class="vk" type="number" min="0" value="10" inputmode="numeric"></label></div>' +
+        '<div class="chips pick">' + ["XS", "S", "M", "L", "XL", "XXL"].map(function (z) { return '<label class="chip-check"><input type="checkbox" value="' + z + '" checked><span>' + z + "</span></label>"; }).join("") + "</div>" +
+        '<div class="form" style="grid-template-columns:1fr;margin-bottom:0"><label>Other size (optional, e.g. 3XL or Kids 10)<input class="vo" maxlength="20" placeholder=""></label></div>' +
+        '<button class="btn btn-red small" data-add-sizes type="button">Add sizes</button></div></div>';
     }).join("") : '<p class="muted">No products yet.</p>';
   }
   $("addProductBtn").addEventListener("click", async function () {
@@ -140,11 +143,20 @@
   });
   $("productList").addEventListener("click", async function (e) {
     var t = e.target;
-    if (t.hasAttribute("data-add-var")) {
-      var box = t.closest("[data-prod]"), colour = box.querySelector(".vc").value.trim(), size = box.querySelector(".vs").value.trim(), stock = parseInt(box.querySelector(".vk").value, 10);
-      if (!colour || !size || isNaN(stock) || stock < 0) { say($("globalMsg"), "Colour, size and stock are required.", false); return; }
-      var r = await sb.from("product_variants").insert({ product_id: box.getAttribute("data-prod"), colour: colour, size: size, stock: stock });
-      if (r.error) say($("globalMsg"), r.error.message, false); else loadProducts();
+    if (t.hasAttribute("data-add-sizes")) {
+      var box = t.closest("[data-prod]"), colour = box.querySelector(".vc").value.trim(), stock = parseInt(box.querySelector(".vk").value, 10);
+      var sizes = Array.prototype.map.call(box.querySelectorAll(".pick input:checked"), function (c) { return c.value; });
+      var other = box.querySelector(".vo").value.trim(); if (other) sizes.push(other);
+      if (!colour) { say($("globalMsg"), "Type the colour first (for example Black).", false); return; }
+      if (!sizes.length) { say($("globalMsg"), "Tick at least one size.", false); return; }
+      if (isNaN(stock) || stock < 0) { say($("globalMsg"), "Stock must be 0 or more.", false); return; }
+      var have = (box.getAttribute("data-have") || "").split(";");
+      var rowsNew = sizes.filter(function (z) { return have.indexOf((colour + "|" + z).toLowerCase()) < 0; }).map(function (z) { return { product_id: box.getAttribute("data-prod"), colour: colour, size: z, stock: stock }; });
+      if (!rowsNew.length) { say($("globalMsg"), "Those sizes are already added for " + colour + ".", false); return; }
+      t.disabled = true;
+      var r = await sb.from("product_variants").insert(rowsNew);
+      t.disabled = false;
+      if (r.error) say($("globalMsg"), r.error.message, false); else { say($("globalMsg"), rowsNew.length + " size(s) added.", true); loadProducts(); }
     }
     if (t.hasAttribute("data-del-var")) {
       var r2 = await sb.from("product_variants").delete().eq("id", t.getAttribute("data-del-var"));

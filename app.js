@@ -10,7 +10,7 @@
   var DEMO = {
     events: [{ title: "RNSA Night Run", description: "Get ready for another night of cars, speed, sound and the RNSA community.", event_date: "2026-11-14T19:00:00+02:00", location: "Durban, South Africa" }],
     products: [
-      { id: "d1", name: "RNSA Classic Tee", description: "Black tee with the red RNSA print.", price: 250, image_url: "images/rnsa-logo.webp", variants: [{ id: "d1a", colour: "Black", size: "M", stock: 10 }, { id: "d1b", colour: "Black", size: "L", stock: 10 }] },
+      { id: "d1", name: "RNSA Classic Tee", description: "Black tee with the red RNSA print.", price: 250, image_url: "images/rnsa-logo.webp", variants: ["XS", "S", "M", "L", "XL", "XXL"].map(function (z, i) { return { id: "d1" + z, colour: "Black", size: z, stock: z === "XXL" ? 0 : 10 }; }) },
       { id: "d2", name: "RNSA Cap", description: "Adjustable cap, black and red.", price: 180, image_url: "images/rnsa-logo-splash.webp", variants: [{ id: "d2a", colour: "Black", size: "One size", stock: 15 }] }
     ],
     gallery: [
@@ -100,33 +100,59 @@
     tick(); timer = setInterval(tick, 1000);
   }
 
-  /* ---------- Merch ---------- */
+  /* ---------- Merch: customers tap a size button ---------- */
+  var SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+  function sizeRank(z) { var i = SIZE_ORDER.indexOf(String(z).toUpperCase()); return i < 0 ? 99 : i; }
   function renderProducts(list) {
     var grid = $("productGrid");
     if (!list.length) { grid.innerHTML = '<p class="muted">New RNSA merch is coming soon.</p>'; return; }
     grid.innerHTML = list.map(function (p) {
-      var vs = (p.variants || []).filter(function (v) { return v.stock > 0; });
+      var vs = (p.variants || []).slice().sort(function (a, b) { return sizeRank(a.size) - sizeRank(b.size); });
+      var colours = [];
+      vs.forEach(function (v) { if (colours.indexOf(v.colour) < 0) colours.push(v.colour); });
+      var inStock = vs.some(function (v) { return v.stock > 0; });
       var img = p.image_url || "images/rnsa-logo.webp";
-      var opts = vs.map(function (v) { return '<option value="' + esc(v.id) + '">' + esc(v.colour) + " - " + esc(v.size) + "</option>"; }).join("");
+      var opts = "";
+      if (vs.length) {
+        if (colours.length > 1) {
+          opts += '<p class="opt-label">Colour</p><div class="chips" role="group" aria-label="Colour for ' + esc(p.name) + '">' + colours.map(function (c, i) {
+            return '<button type="button" class="chip" data-colour="' + esc(c) + '" aria-pressed="' + (i === 0) + '">' + esc(c) + "</button>";
+          }).join("") + "</div>";
+        }
+        opts += '<p class="opt-label">Size</p><div class="chips sizes" role="group" aria-label="Size for ' + esc(p.name) + '">' + vs.map(function (v) {
+          return '<button type="button" class="chip size" data-vid="' + esc(v.id) + '" data-colour="' + esc(v.colour) + '" aria-pressed="false"' + (v.stock > 0 ? "" : " disabled") + (v.colour === colours[0] ? "" : " hidden") + ">" + esc(v.size) + "</button>";
+        }).join("") + "</div>";
+      }
       return '<article class="product" data-id="' + esc(p.id) + '">' +
         '<img src="' + esc(img) + '" alt="' + esc(p.name) + ' - RNSA merch" loading="lazy" width="400" height="400">' +
         '<div class="body"><h3>' + esc(p.name) + "</h3>" +
         '<p class="desc">' + esc(p.description || "") + "</p>" +
-        '<div class="price">' + money(p.price) + "</div>" +
-        (vs.length ? '<select aria-label="Choose colour and size for ' + esc(p.name) + '">' + opts + '</select><button class="btn btn-red add" type="button">Add to cart</button>'
-                   : '<button class="btn btn-outline" type="button" disabled>Sold out</button>') +
+        '<div class="price">' + money(p.price) + "</div>" + opts +
+        (inStock ? '<button class="btn btn-red add" type="button">Add to cart</button>'
+                 : '<button class="btn btn-outline" type="button" disabled>Sold out</button>') +
         "</div></article>";
     }).join("");
 
-    grid.querySelectorAll(".add").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var card = btn.closest(".product");
+    grid.onclick = function (e) {
+      var card = e.target.closest(".product"); if (!card) return;
+      var chip = e.target.closest(".chip");
+      if (chip && chip.hasAttribute("data-colour") && !chip.classList.contains("size")) { // picked a colour: show only that colour's sizes
+        card.querySelectorAll(".chip[data-colour]:not(.size)").forEach(function (c) { c.setAttribute("aria-pressed", c === chip); });
+        card.querySelectorAll(".size").forEach(function (z) { z.hidden = z.dataset.colour !== chip.dataset.colour; z.setAttribute("aria-pressed", "false"); });
+        return;
+      }
+      if (chip && chip.classList.contains("size") && !chip.disabled) { // picked a size
+        card.querySelectorAll(".size").forEach(function (z) { z.setAttribute("aria-pressed", z === chip); });
+        return;
+      }
+      if (e.target.closest(".add")) {
+        var picked = card.querySelector(".size[aria-pressed='true']");
+        if (!picked) { toast("Pick a size first"); return; }
         var p = list.find(function (x) { return String(x.id) === card.dataset.id; });
-        var vid = card.querySelector("select").value;
-        var v = p.variants.find(function (x) { return String(x.id) === vid; });
+        var v = p.variants.find(function (x) { return String(x.id) === picked.dataset.vid; });
         addToCart(p, v);
-      });
-    });
+      }
+    };
   }
 
   /* ---------- Cart (saved on the visitor's phone only) ---------- */
