@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Racing Nation SA | RNSA - Car Club, Events &amp; Merch</title>
   <meta name="description" content="Racing Nation SA (RNSA) is a South African car club built around performance cars, events and community. See the next event, shop merch and join the nation.">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#07080b">
 
   <!-- Share previews (WhatsApp, Facebook etc). Replace rnsa.pages.dev with the real web address. -->
   <meta property="og:type" content="website">
@@ -19,36 +19,17 @@
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script>
-    /* Intro plays once per visit. Skipped for people who prefer less motion. */
-    (function(){var d=document.documentElement;d.classList.add("js");
-    try{if(!sessionStorage.getItem("rnsa-intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("intro-on");}catch(e){}})();
-  </script>
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
-<!-- INTRO ANIMATION -->
-<div id="intro" role="presentation">
-  <div class="in-panel top"></div>
-  <div class="in-panel bot"></div>
-  <div class="in-streak"></div>
-  <div class="in-center">
-    <img class="in-logo" src="images/rnsa-logo.webp" alt="" width="220" height="220">
-    <p class="in-word">Racing Nation SA</p>
-    <div class="in-bar"><i></i></div>
-  </div>
-  <p class="in-count"><span id="inCount">000</span><small>%</small></p>
-  <p class="in-est">EST. 2021</p>
-  <p class="in-skip">Tap to skip</p>
-</div>
 <div class="progress" id="progress"></div>
 
 <header class="nav" id="top">
   <a class="brand" href="#home" aria-label="RNSA home">
-    <img src="images/rnsa-logo.webp" alt="Racing Nation SA logo" width="44" height="44">
-    <span>RNSA</span>
+    <b class="bar" aria-hidden="true"></b><span>RNSA</span>
   </a>
   <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
   <nav id="menu" aria-label="Main menu">
@@ -69,24 +50,17 @@
   <div class="container hero-grid">
     <div class="hero-text">
       <p class="eyebrow">Racing Nation South Africa</p>
-      <h1>BUILT FOR <span class="red">SPEED.</span></h1>
+      <h1><span class="ln"><span>Built for</span></span><span class="ln red-ln"><span>Speed.</span></span></h1>
       <p class="lead">Where passion meets performance.<br>Welcome to Racing Nation SA.</p>
       <div class="btn-row">
         <a class="btn btn-red" href="#events">View next event</a>
         <a class="btn btn-outline" href="#contact">Join the race</a>
       </div>
     </div>
-    <div class="hero-art"><img src="images/rnsa-logo-splash.webp" alt="Racing Nation SA logo with red and grey paint splash" width="600" height="600"></div>
+    <ul class="hero-meta" aria-label="Club facts"><li>Est. 2021</li><li>Durban</li><li>South Africa</li></ul>
+    <a class="scroll-cue" href="#events" aria-label="Scroll to next event"><span>Scroll</span><i></i></a>
   </div>
 </section>
-
-<!-- MARQUEE -->
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span>Built for speed</span><span>Community</span><span>Performance</span><span>Experience</span><span>Racing Nation SA</span><span>Durban</span>
-    <span>Built for speed</span><span>Community</span><span>Performance</span><span>Experience</span><span>Racing Nation SA</span><span>Durban</span>
-  </div>
-</div>
 
 <!-- EVENTS -->
 <section class="section" id="events">
@@ -154,7 +128,7 @@
 </section>
 
 <!-- ABOUT -->
-<section class="section alt" id="about">
+<section class="section alt photo-bg" id="about">
   <div class="container">
     <p class="eyebrow">The RNSA movement</p>
     <h2>MORE THAN A <span class="red">CAR CLUB.</span></h2>
@@ -185,7 +159,7 @@
 </section>
 
 <!-- CONTACT -->
-<section class="section alt" id="contact">
+<section class="section alt photo-bg" id="contact">
   <div class="container narrow center">
     <p class="eyebrow">Ready to hit the road?</p>
     <h2>BRING YOUR <span class="red">CAR.</span></h2>
@@ -208,7 +182,7 @@
 <footer class="footer">
   <div class="container foot">
     <div>
-      <img src="images/rnsa-logo.webp" alt="Racing Nation SA logo" width="64" height="64" loading="lazy">
+      <p class="foot-mark" aria-hidden="true">RNSA</p>
       <p><strong>RACING NATION SOUTH AFRICA</strong></p>
       <p class="muted tiny">© 2026 Racing Nation SA. All rights reserved.</p>
     </div>

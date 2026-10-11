@@ -13,7 +13,14 @@
       { id: "d1", name: "RNSA Classic Tee", description: "Black tee with the red RNSA print.", price: 250, image_url: "images/rnsa-logo.webp", variants: [{ id: "d1a", colour: "Black", size: "M", stock: 10 }, { id: "d1b", colour: "Black", size: "L", stock: 10 }] },
       { id: "d2", name: "RNSA Cap", description: "Adjustable cap, black and red.", price: 180, image_url: "images/rnsa-logo-splash.webp", variants: [{ id: "d2a", colour: "Black", size: "One size", stock: 15 }] }
     ],
-    gallery: []
+    gallery: [
+      { image_url: "images/gallery/night-takeover.jpg", caption: "Night takeover. The whole intersection packed with RNSA cars." },
+      { image_url: "images/gallery/e30-row.jpg", caption: "E30 row. Classic BMWs lined up under the city lights." },
+      { image_url: "images/gallery/grey-supra.jpg", caption: "Red eyes. Grey Supra parked up after dark." },
+      { image_url: "images/gallery/blue-golf.jpg", caption: "Deep blue Golf on mesh wheels, sitting low." },
+      { image_url: "images/gallery/white-370z.jpg", caption: "White 370Z with black wheels, number 151." },
+      { image_url: "images/gallery/yellow-m4.jpg", caption: "Yellow M4 next to the Escort, 160 on the glass." }
+    ]
   };
 
   function $(id) { return document.getElementById(id); }
@@ -43,6 +50,25 @@
     return out;
   }
 
+  /* ---------- Split-flap digits ---------- */
+  function flapHTML(cur, prev) { return '<i class="h t"><b>' + cur + '</b></i><i class="h u"><b>' + prev + '</b></i><i class="h ft"><b>' + prev + '</b></i><i class="h fb"><b>' + cur + '</b></i>'; }
+  function setFlap(el, val) {
+    val = String(val);
+    var tiles = el.querySelectorAll(".fl");
+    if (tiles.length !== val.length) { // first draw (or digit count changed): no animation
+      el.innerHTML = val.split("").map(function (d) { return '<span class="fl" data-v="' + d + '">' + flapHTML(d, d) + "</span>"; }).join("");
+      return;
+    }
+    tiles.forEach(function (t, i) {
+      var nv = val.charAt(i), ov = t.dataset.v;
+      if (nv === ov) return;
+      t.dataset.v = nv;
+      t.classList.remove("go"); t.innerHTML = flapHTML(nv, ov); void t.offsetWidth; t.classList.add("go");
+      clearTimeout(t._t);
+      t._t = setTimeout(function () { t.classList.remove("go"); t.innerHTML = flapHTML(nv, nv); }, 700);
+    });
+  }
+
   /* ---------- Next event + countdown ---------- */
   var timer = null;
   function showEvent(ev) {
@@ -65,12 +91,11 @@
 
     function tick() {
       var left = d - new Date();
-      if (left <= 0) { clearInterval(timer); $("cdDays").textContent = $("cdHours").textContent = $("cdMins").textContent = $("cdSecs").textContent = "00"; return; }
-      $("cdDays").textContent = pad(Math.floor(left / 864e5));
-      $("cdHours").textContent = pad(Math.floor(left / 36e5) % 24);
-      $("cdMins").textContent = pad(Math.floor(left / 6e4) % 60);
-      var sEl = $("cdSecs"); sEl.textContent = pad(Math.floor(left / 1e3) % 60);
-      sEl.classList.remove("tick"); void sEl.offsetWidth; sEl.classList.add("tick");
+      if (left <= 0) { clearInterval(timer); setFlap($("cdDays"), "00"); setFlap($("cdHours"), "00"); setFlap($("cdMins"), "00"); setFlap($("cdSecs"), "00"); return; }
+      setFlap($("cdDays"), pad(Math.floor(left / 864e5)));
+      setFlap($("cdHours"), pad(Math.floor(left / 36e5) % 24));
+      setFlap($("cdMins"), pad(Math.floor(left / 6e4) % 60));
+      setFlap($("cdSecs"), pad(Math.floor(left / 1e3) % 60));
     }
     tick(); timer = setInterval(tick, 1000);
   }
@@ -176,22 +201,42 @@
     es.forEach(function (e) { if (e.isIntersecting) { var t = e.target; t.classList.add("in"); io.unobserve(t); setTimeout(function () { t.style.transitionDelay = ""; }, 1300); } });
   }, { threshold: 0.1 }) : null;
 
+  /* Kinetic headings: wrap every word in a mask so it can slide up on its own */
+  function splitWords(node, counter) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+          var w = document.createElement("span"), i = document.createElement("span");
+          w.className = "kw"; i.className = "ki"; i.textContent = part;
+          i.style.transitionDelay = (counter.n++ * 90) + "ms";
+          w.appendChild(i); frag.appendChild(w);
+        });
+        node.replaceChild(frag, n);
+      } else if (n.nodeType === 1) splitWords(n, counter);
+    });
+  }
+
   function initReveal() {
     document.querySelectorAll(".hero-text > *, .hero-art, .section .container > *, .product, .pillar, .event-info li, .gallery button, .contact-info li").forEach(function (el, i) {
       if (el.dataset.r) return;
+      if (el.tagName === "H2") splitWords(el, { n: 0 });
       el.dataset.r = "1"; el.classList.add("reveal");
-      el.style.transitionDelay = (i % 5) * 70 + "ms";
+      el.style.transitionDelay = (i % 4) * 90 + "ms";
       if (io) io.observe(el); else el.classList.add("in");
     });
   }
   function startReveal() { revealReady = true; initReveal(); }
 
-  var navEl = document.querySelector(".nav"), prog = $("progress");
+  var navEl = document.querySelector(".nav"), prog = $("progress"), heroEl = document.querySelector(".hero");
   var secs = document.querySelectorAll("main section[id]"), navLinks = menu.querySelectorAll('a[href^="#"]');
   function onScroll() {
     var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
     prog.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
     navEl.classList.toggle("scrolled", y > 30);
+    if (heroEl && y < window.innerHeight * 1.2) heroEl.style.setProperty("--py", (y * 0.22) + "px"); // slow photo parallax
     var cur = "";
     secs.forEach(function (s) { if (s.getBoundingClientRect().top <= 140) cur = "#" + s.id; });
     navLinks.forEach(function (l) { l.classList.toggle("active", l.getAttribute("href") === cur); });
@@ -199,29 +244,10 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  /* ---------- Intro animation (once per visit) ---------- */
-  var introEl = $("intro"), introOn = document.documentElement.classList.contains("intro-on");
-  function finishIntro() {
-    if (!introEl || introEl.classList.contains("done")) return;
-    introEl.classList.add("done");
-    try { sessionStorage.setItem("rnsa-intro", "1"); } catch (e) { /* ignore */ }
-    startReveal();
-    setTimeout(function () { document.documentElement.classList.remove("intro-on"); introEl.remove(); }, 1300);
-  }
-  if (introOn && introEl) {
-    var counter = $("inCount"), t0 = performance.now(), dur = 2000;
-    (function step(now) {
-      if (introEl.classList.contains("done")) return;
-      var p = Math.min(1, (now - t0) / dur);
-      counter.textContent = String(Math.round(p * 100)).padStart(3, "0");
-      if (p < 1) requestAnimationFrame(step); else setTimeout(finishIntro, 450);
-    })(t0);
-    introEl.addEventListener("click", finishIntro);
-    setTimeout(finishIntro, 5000); // safety: never get stuck
-  } else {
-    if (introEl) introEl.remove();
-    startReveal();
-  }
+  /* ---------- Start the page: hero lines slide in once fonts are ready ---------- */
+  function goReady() { document.documentElement.classList.add("ready"); }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(goReady); setTimeout(goReady, 1200); } else { goReady(); }
+  startReveal();
 
   /* ---------- Start ---------- */
   renderCart();
