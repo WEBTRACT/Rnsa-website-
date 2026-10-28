@@ -230,6 +230,17 @@ p { margin-bottom: 1rem; }
 .foot nav a { color: var(--muted); font-size: .85rem; text-decoration: none; }
 .foot nav a:hover { color: #fff; }
 
+/* SOCIAL ICONS + WEBTRACT CREDIT */
+.socials { list-style: none; display: flex; gap: .6rem; }
+.center-socials { justify-content: center; margin-top: .6rem; }
+.socials a { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.28); color: var(--text); transition: background .3s, border-color .3s, color .3s; }
+.socials a:hover, .socials a:focus-visible { background: var(--red); border-color: var(--red); color: #fff; }
+.socials .ico { width: 22px; height: 22px; }
+.follow { justify-content: center; margin-top: 2.2rem; margin-bottom: 0; }
+.made-by { margin: .3rem 0 0; opacity: .6; }
+.made-by a { text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: color .3s, border-color .3s; }
+.made-by a:hover { color: #fff; border-color: var(--red); opacity: 1; }
+
 /* PHOTO VIEWER + TOAST + WHATSAPP */
 .lightbox { position: fixed; inset: 0; background: rgba(4,5,8,.96); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; }
 .lightbox img { max-height: 90vh; max-width: 95vw; }
